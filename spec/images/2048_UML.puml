@@ -1,0 +1,79 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+enum DirectionT {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT;
+}
+
+interface StringRepresentable {
+    +getStringRepresentation() : String;
+}
+
+class TileT {
+    #value : Integer;
+    #colour : Color;
+    +new TileT(number : Integer) : TileT;
+    +getValue() : Integer;
+    +setValue(number : Integer) : void;
+    +getColour() : Color;
+    +getStringRepresentation() : String;
+}
+
+class BoardT {
+    #dimension : Integer;
+    #board : TileT[][];
+    +new BoardT(dim : Integer) : BoardT;
+    +getAdjacentTileTs(i : Integer, j : Integer) : TileT[];
+    +getTileT(i : Integer, j : Integer) : TileT;
+    +getDimesnion() : Integer;
+    +getBoard() : TileT[][];
+    +setBoard(b : TileT[][]) : void;
+    +getHighestTileT() : TileT;
+    +getStringRepresentation() : String;
+    +generateTileT() : void;
+    +canMove(dir : DirectionT) : boolean;
+    +move(dir : DirectionT) : void;
+    -rotate(times : Integer) : void;
+    -slide(dir : DirectionT) : void;
+    -combine(dir : DirectionT) : void;
+}
+
+abstract GameController {
+    #score : Integer;
+    #board : BoardT;
+    +newGame(dim : Integer) : void;
+    +getBoardT() : BoardT;
+    +setBoardT(b : BoardT) : void;
+    +getScore() : Integer;
+    +addScore(gained : Integer) : void;
+    +setScore(newScore : Integer) : void;
+    +getStringRepresentation() : String;
+    +gameOver() : boolean;
+    +canMove(dir : DirectionT) : boolean;
+    +move(dir : DirectionT) : void;
+}
+
+abstract GUIGraphics {
+    +win : Pizel[][];
+    +stdin : stdin;
+    #gameSize : Integer;
+    +setUpGUI(dim : Integer) : void;
+    +keyPressed(stdin : stdin) : void;
+    +drawGame() : void;
+}
+
+StringRepresentable  <|-- TileT
+StringRepresentable  <|-- BoardT
+StringRepresentable  <|-- GameController
+TileT --o BoardT
+GameController o-- BoardT
+GUIGraphics o-- GameController
+DirectionT --o BoardT
+DirectionT --o GameController
+DirectionT --o GUIGraphics
+
+
+@enduml
